@@ -1,5 +1,75 @@
-Options +SymLinksIfOwnerMatch
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
+Options All -Indexes
+Options -MultiViews
+Options -Indexes
+Options +SymLinksIfOwnerMatch
+<IfModule mod_headers.c>
+Header set X-XSS-Protection "1; mode=block"
+Header always set Content-Security-Policy "upgrade-insecure-requests;"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header set Age "216000"
+Header set X-Content-Type-Options "nosniff"
+Header set X-Permitted-Cross-Domain-Policies "none"
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+#Header set Content-Security-Policy "default-src * data:; script-src https: 'unsafe-inline' 'unsafe-eval'; style-src https: 'unsafe-inline'"
+#Header set Content-Security-Policy "default-src 'self'; script-src https: 'unsafe-inline'; img-src https: data: 'unsafe-inline'; style-src https: 'unsafe-inline'; object-src 'none'; child-src 'self'; frame-ancestors 'none'; frame-src 'self' *.hotjar.com; connect-src 'self' *.hotjar.com; base-uri 'self';form-action 'self'; font-src https: data: 'self' *.fontawesome.com; upgrade-insecure-requests; block-all-mixed-content"
+Header always set Permissions-Policy "geolocation=(); midi=();notifications=();push=();sync-xhr=();accelerometer=(); gyroscope=(); magnetometer=(); payment=(); camera=(); microphone=();usb=(); xr=();speaker=(self);vibrate=();fullscreen=(self);" 
+Header set Permissions-Policy "accelerometer=Origin(), autoplay=(), camera=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), publickey-credentials-get=(), usb=()"
+Header set Referrer-Policy "no-referrer-when-downgrade"
+Header set Expect-CT: enforce, max-age=31536000
+Header always unset X-Powered-By
+Header always unset server
+Header unset X-Powered-By
+Header unset server
+Header append Vary "Accept-Encoding, User-Agent, Referer"
+</IfModule>
+<IfModule mod_expires.c>
+ExpiresActive on
+ExpiresDefault "access plus 2 days"
+ExpiresByType image/jpg "access plus 1 month"
+ExpiresByType image/svg+xml "access 1 month"
+ExpiresByType image/svg "access plus 1 month"
+ExpiresByType image/gif "access plus 1 month"
+ExpiresByType image/jpeg "access plus 1 month"
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType text/css "access plus 1 month"
+ExpiresByType text/javascript "access plus 1 month"
+ExpiresByType text/html "access plus 600 seconds"
+ExpiresByType text/xml "access plus 1 seconds"
+ExpiresByType text/plain "access plus 1 seconds"
+ExpiresByType application/javascript "access plus 1 month"
+ExpiresByType application/x-shockwave-flash "access plus 1 month"
+ExpiresByType image/ico "access plus 1 month"
+ExpiresByType image/x-icon "access plus 1 month"
+ExpiresByType image/x-ico "access plus 1 year"
+ExpiresByType application/xml "access plus 1 seconds"
+ExpiresByType application/rss+xml "access plus 1 seconds"
+ExpiresByType application/json "access plus 1 seconds"
+ExpiresByType application/x-javascript "access plus 1 week"
+ExpiresByType application/pdf "access plus 1 month"
+</IfModule>
+<IfModule mod_deflate.c>
+SetOutputFilter DEFLATE
+SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|ico)$ no-gzip dont-vary
+BrowserMatch ^Mozilla/4\.0[678] no-gzip
+BrowserMatch ^Mozilla/4 gzip-only-text/html
+BrowserMatch \bMSIE\s(7|8) !no-gzip !gzip-only-text/html
+AddOutputFilterByType DEFLATE text/plain
+AddOutputFilterByType DEFLATE text/html
+AddOutputFilterByType DEFLATE text/xml
+AddOutputFilterByType DEFLATE text/css
+AddOutputFilterByType DEFLATE text/js
+AddOutputFilterByType DEFLATE application/xml
+AddOutputFilterByType DEFLATE application/xhtml+xml
+AddOutputFilterByType DEFLATE application/rss+xml
+AddOutputFilterByType DEFLATE application/atom_xml
+AddOutputFilterByType DEFLATE application/javascript
+AddOutputFilterByType DEFLATE application/x-javascript
+AddOutputFilterByType DEFLATE application/x-httpd-php
+AddOutputFilterByType DEFLATE application/x-font-ttf
+AddOutputFilterByType DEFLATE application/x-font-woff
+AddOutputFilterByType DEFLATE application/x-font-opentype
+</IfModule>
